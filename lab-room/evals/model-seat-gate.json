@@ -1,0 +1,19 @@
+{
+  "id": "model-seat-gate",
+  "name": "Model Seat Gate",
+  "description": "Checks model-facing tool paths and protocol docs.",
+  "checks": [
+    { "type": "file_exists", "path": "src/mcp-server.mjs" },
+    { "type": "file_exists", "path": "docs/model-only-tools.md" },
+    { "type": "file_exists", "path": "docs/model-seat-protocol.md" },
+    { "type": "json_file_valid", "path": "client-packages/mcp/codex-truth-lab.local.json" },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["--check", "src/mcp-server.mjs"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0 }
+    }
+  ]
+}
+

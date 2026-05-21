@@ -1,0 +1,33 @@
+{
+  "id": "completion-gate",
+  "name": "Completion Gate",
+  "description": "Checks that source, docs, tests, runtime separation, and the desired TODO list are complete.",
+  "checks": [
+    { "type": "todo_complete", "path": "docs/everything-i-want-todo.md" },
+    { "type": "markdown_links_valid" },
+    { "type": "secret_scan" },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["scripts/check-syntax.mjs"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0 }
+    },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["--test"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0 }
+    },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["scripts/smoke-http.mjs"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0 }
+    },
+    { "type": "git_source_clean" }
+  ]
+}
+

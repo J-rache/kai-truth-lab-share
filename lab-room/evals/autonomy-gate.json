@@ -1,0 +1,20 @@
+{
+  "id": "autonomy-gate",
+  "name": "Autonomy Gate",
+  "description": "Checks the scheduled self-check, failure inbox, Mystro handoff, and tool promotion paths exist and execute.",
+  "checks": [
+    { "type": "file_exists", "path": "src/autonomy.mjs" },
+    { "type": "file_exists", "path": "src/failure-inbox.mjs" },
+    { "type": "file_exists", "path": "src/mystro-bridge.mjs" },
+    { "type": "file_exists", "path": "src/tool-promotion.mjs" },
+    { "type": "file_exists", "path": "scripts/install-autonomy-task.ps1" },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["src/cli.mjs", "tool", "promote", "--id", "gate-smoke", "--name", "Gate Smoke", "--path", ".", "--verify", "npm run verify", "--public-safe", "--json"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0, "stdoutIncludes": ["public_share_candidate"] }
+    }
+  ]
+}
+

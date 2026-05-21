@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Truth Lab</title>
+    <link rel="stylesheet" href="/app/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Local Workbench</span>
+          <h1>Codex Truth Lab</h1>
+        </div>
+        <div class="status-line" id="statusLine">Loading</div>
+      </header>
+
+      <section class="layout">
+        <aside class="rail">
+          <button class="nav active" data-view="overview">Overview</button>
+          <button class="nav" data-view="evals">Eval Gates</button>
+          <button class="nav" data-view="claims">Claims</button>
+          <button class="nav" data-view="tools">Tools</button>
+          <button class="nav" data-view="seats">Model Seats</button>
+          <button class="nav" data-view="failures">Failures</button>
+          <button class="nav" data-view="notes">Notes</button>
+        </aside>
+
+        <section class="workspace">
+          <section class="view active" id="view-overview">
+            <div class="metric-grid" id="metrics"></div>
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Source Status</h2>
+                <button id="refreshSource">Refresh</button>
+              </div>
+              <pre id="sourceStatus">Loading</pre>
+            </section>
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Recent Runs</h2>
+                <div class="button-pair">
+                  <button data-run-eval="lab-self-check">Run Self Check</button>
+                  <button id="runAutonomy">Run Autonomy Cycle</button>
+                </div>
+              </div>
+              <div id="recentRuns" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-evals">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Eval Gates</h2>
+                <button data-run-eval="lab-self-check">Run Core Gate</button>
+              </div>
+              <div id="evalList" class="grid-list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-claims">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Claims</h2>
+              </div>
+              <form id="claimForm" class="inline-form">
+                <input name="title" placeholder="Claim title" required />
+                <select name="state">
+                  <option value="hypothesis">hypothesis</option>
+                  <option value="design_sketch">design_sketch</option>
+                  <option value="unverified">unverified</option>
+                  <option value="machine_proven">machine_proven</option>
+                  <option value="source_backed">source_backed</option>
+                  <option value="production_ready">production_ready</option>
+                </select>
+                <input name="evidence" placeholder="Evidence when required" />
+                <button>Add Claim</button>
+              </form>
+              <div id="claimList" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-tools">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Tool Registry</h2>
+              </div>
+              <form id="toolForm" class="inline-form">
+                <input name="id" placeholder="tool-id" required />
+                <input name="name" placeholder="Tool name" required />
+                <input name="path" placeholder="Path or command" required />
+                <input name="verify" placeholder="Verify command" />
+                <button>Add Tool</button>
+              </form>
+              <div id="toolList" class="list"></div>
+              <div class="panel-title sub">
+                <h2>Promotion Decision</h2>
+              </div>
+              <form id="promotionForm" class="inline-form">
+                <input name="id" placeholder="tool-id" required />
+                <input name="name" placeholder="Tool name" required />
+                <input name="path" placeholder="Path or command" required />
+                <input name="verify" placeholder="Verify command" required />
+                <label class="checkbox-line"><input type="checkbox" name="publicSafe" /> Public safe</label>
+                <button>Decide</button>
+              </form>
+              <div id="promotionResult" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-seats">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Model Seats</h2>
+              </div>
+              <form id="seatForm" class="inline-form">
+                <input name="clientId" placeholder="client-id" required />
+                <input name="label" placeholder="Label" />
+                <input name="model" placeholder="Model" />
+                <input name="purpose" placeholder="Purpose" />
+                <button>Attach Seat</button>
+              </form>
+              <div id="seatList" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-notes">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Session Notes</h2>
+              </div>
+              <form id="noteForm" class="stack-form">
+                <input name="summary" placeholder="Summary" required />
+                <textarea name="details" placeholder="Details"></textarea>
+                <button>Write Note</button>
+              </form>
+              <div id="noteList" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-failures">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Failure Inbox</h2>
+                <button id="runMystroHandoff">Mystro Completion Handoff</button>
+              </div>
+              <form id="failureForm" class="inline-form">
+                <input name="summary" placeholder="Failure summary" required />
+                <input name="source" placeholder="Source" />
+                <select name="severity">
+                  <option value="medium">medium</option>
+                  <option value="high">high</option>
+                  <option value="low">low</option>
+                </select>
+                <input name="details" placeholder="Details" />
+                <button>Add Failure</button>
+              </form>
+              <div id="failureList" class="list"></div>
+            </section>
+          </section>
+        </section>
+      </section>
+    </main>
+    <script src="/app/app.js"></script>
+  </body>
+</html>

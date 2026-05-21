@@ -1,0 +1,17 @@
+{
+  "id": "public-share-gate",
+  "name": "Public Share Gate",
+  "description": "Checks the public export lane without publishing private runtime evidence.",
+  "checks": [
+    { "type": "file_exists", "path": "docs/public-vs-private.md" },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["scripts/export-public.mjs", "--dry-run"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0, "stdoutIncludes": ["public export dry-run ok"] }
+    },
+    { "type": "secret_scan" }
+  ]
+}
+

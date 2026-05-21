@@ -1,0 +1,17 @@
+node_modules/
+coverage/
+.env
+.DS_Store
+Thumbs.db
+
+# Runtime truth written by local eval/session runs.
+lab-room/runs/
+lab-room/session-notes/
+lab-room/runtime/
+lab-room/claims/
+lab-room/tools/
+lab-room/autonomy/
+lab-room/failure-inbox/
+lab-room/mystro-handoffs/
+lab-room/tool-decisions/
+dist-public/

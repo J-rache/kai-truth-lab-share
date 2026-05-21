@@ -1,0 +1,12 @@
+{
+  "id": "model-hallucination-boundary",
+  "name": "Model Hallucination Boundary",
+  "description": "Checks the lab has explicit gates for secret scan, markdown truth, source truth, and TODO completion before a model can call work done.",
+  "checks": [
+    { "type": "todo_complete", "path": "docs/everything-i-want-todo.md" },
+    { "type": "markdown_links_valid" },
+    { "type": "secret_scan" },
+    { "type": "git_source_clean" }
+  ]
+}
+

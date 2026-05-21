@@ -1,0 +1,25 @@
+{
+  "name": "codex-truth-lab",
+  "version": "0.1.0",
+  "description": "Local-first evaluation-gated AI workbench for truthful tool use, memory, and model-seat experiments.",
+  "type": "module",
+  "private": false,
+  "bin": {
+    "truth-lab": "./src/cli.mjs"
+  },
+  "scripts": {
+    "check": "node scripts/check-syntax.mjs",
+    "test": "node --test",
+    "smoke": "node src/cli.mjs eval run lab-self-check --json",
+    "smoke:http": "node scripts/smoke-http.mjs",
+    "verify": "npm run check && npm test && npm run smoke:http && npm run smoke && npm run export:public -- --dry-run",
+    "start": "node src/server.mjs",
+    "mcp": "node src/mcp-server.mjs",
+    "export:public": "node scripts/export-public.mjs",
+    "status:source": "node src/cli.mjs source-status",
+    "autonomy": "node src/cli.mjs autonomy run"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

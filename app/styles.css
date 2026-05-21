@@ -1,0 +1,291 @@
+:root {
+  color-scheme: dark;
+  --bg: #11130f;
+  --surface: #191c17;
+  --panel: #20231d;
+  --border: #3a4034;
+  --text: #ece7dc;
+  --muted: #b7b09f;
+  --accent: #9fcf79;
+  --blue: #8eb9d6;
+  --warn: #e0b36a;
+  --bad: #dd7f74;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  background: #2a3325;
+  color: var(--text);
+  border: 1px solid #4d5c42;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #12140f;
+  color: var(--text);
+  padding: 9px 10px;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+pre {
+  white-space: pre-wrap;
+  overflow: auto;
+  margin: 0;
+  color: #d8d1c2;
+}
+
+.shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  background: #151812;
+}
+
+.eyebrow {
+  display: block;
+  color: var(--blue);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 17px;
+}
+
+h3 {
+  font-size: 14px;
+}
+
+.status-line {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  min-height: calc(100vh - 75px);
+}
+
+.rail {
+  border-right: 1px solid var(--border);
+  background: #151812;
+  padding: 12px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.nav {
+  text-align: left;
+  background: transparent;
+  border-color: transparent;
+}
+
+.nav.active {
+  background: #26311f;
+  border-color: #536747;
+}
+
+.workspace {
+  padding: 16px;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: grid;
+  gap: 14px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric,
+.panel,
+.item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.metric {
+  padding: 12px;
+}
+
+.metric span,
+.item small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 22px;
+}
+
+.panel {
+  padding: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.panel-title.sub {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.button-pair {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.list,
+.grid-list {
+  display: grid;
+  gap: 8px;
+}
+
+.grid-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.item {
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.item.pass {
+  border-color: #526f43;
+}
+
+.item.fail {
+  border-color: #7d453f;
+}
+
+.badge {
+  display: inline-flex;
+  width: fit-content;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 7px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.badge.pass {
+  color: var(--accent);
+  border-color: #526f43;
+}
+
+.badge.fail {
+  color: var(--bad);
+  border-color: #7d453f;
+}
+
+.inline-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  gap: 8px;
+}
+
+.checkbox-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.checkbox-line input {
+  width: auto;
+}
+
+.stack-form {
+  display: grid;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metric-grid,
+  .grid-list,
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+}

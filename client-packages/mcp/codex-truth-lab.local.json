@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "codex-truth-lab": {
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "C:\\Users\\Jae\\Desktop\\codex-truth-lab"
+    }
+  }
+}
+

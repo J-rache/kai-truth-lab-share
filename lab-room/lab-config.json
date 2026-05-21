@@ -1,0 +1,29 @@
+{
+  "schema": "codex-truth-lab.config.v1",
+  "labName": "Codex Truth Lab",
+  "runtimePaths": [
+    "lab-room/runs/",
+    "lab-room/session-notes/",
+    "lab-room/runtime/",
+    "lab-room/claims/",
+    "lab-room/tools/",
+    "lab-room/autonomy/",
+    "lab-room/failure-inbox/",
+    "lab-room/mystro-handoffs/",
+    "lab-room/tool-decisions/",
+    "node_modules/"
+  ],
+  "claimStates": [
+    "hypothesis",
+    "design_sketch",
+    "unverified",
+    "machine_proven",
+    "source_backed",
+    "production_ready"
+  ],
+  "evidenceRequiredFor": [
+    "machine_proven",
+    "source_backed",
+    "production_ready"
+  ]
+}

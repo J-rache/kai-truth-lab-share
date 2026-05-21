@@ -1,0 +1,10 @@
+{
+  "id": "truth-boundary",
+  "name": "Truth Boundary",
+  "description": "Checks that claims cannot be promoted into proven states without evidence.",
+  "checks": [
+    { "type": "json_file_valid", "path": "lab-room/lab-config.json" },
+    { "type": "claim_registry_valid" }
+  ]
+}
+
