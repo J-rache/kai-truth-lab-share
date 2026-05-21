@@ -24,6 +24,8 @@
           <button class="nav" data-view="tools">Tools</button>
           <button class="nav" data-view="seats">Model Seats</button>
           <button class="nav" data-view="failures">Failures</button>
+          <button class="nav" data-view="proof">Proof</button>
+          <button class="nav" data-view="mirrors">Mirrors</button>
           <button class="nav" data-view="notes">Notes</button>
         </aside>
 
@@ -136,6 +138,38 @@
                 <button>Write Note</button>
               </form>
               <div id="noteList" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-proof">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Proof Bundles</h2>
+                <button id="decideNextWork">Decide Next Work</button>
+              </div>
+              <form id="proofForm" class="inline-form">
+                <input name="label" placeholder="Bundle label" required />
+                <label class="checkbox-line"><input type="checkbox" name="quick" /> Quick</label>
+                <button>Create Bundle</button>
+              </form>
+              <div id="nextWorkResult" class="list"></div>
+              <div id="proofList" class="list"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-mirrors">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>Repository Mirrors</h2>
+              </div>
+              <form id="mirrorForm" class="inline-form">
+                <input name="id" placeholder="mirror-id" required />
+                <input name="url" placeholder="https://gitlab.com/group/project.git" required />
+                <input name="host" placeholder="gitlab" />
+                <input name="purpose" placeholder="backup/public share" />
+                <button>Plan Mirror</button>
+              </form>
+              <div id="mirrorList" class="list"></div>
             </section>
           </section>
 

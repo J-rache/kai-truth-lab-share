@@ -6,6 +6,9 @@ import { runAutonomyCycle } from "./autonomy.mjs";
 import { closeFailure, listFailures, recordFailure } from "./failure-inbox.mjs";
 import { createMystroCompletionHandoff } from "./mystro-bridge.mjs";
 import { recordToolPromotion } from "./tool-promotion.mjs";
+import { createProofBundle, listProofBundles } from "./proof-bundle.mjs";
+import { addMirrorPlan, listMirrorPlans, verifyMirrorPlan } from "./repo-redundancy.mjs";
+import { decideNextWork, listNextWorkDecisions } from "./next-work.mjs";
 
 const args = process.argv.slice(2);
 const flags = parseFlags(args);
@@ -45,6 +48,45 @@ async function main() {
   if (group === "autonomy" && action === "run") {
     const cycle = await runAutonomyCycle({ writeFailures: flags.values["no-failure-write"] !== true });
     return print(cycle, cycle.status === "passed" ? 0 : 1);
+  }
+
+  if (group === "next" && action === "decide") {
+    return print(await decideNextWork({ question: flags.values.question }));
+  }
+
+  if (group === "next" && action === "list") {
+    return print(await listNextWorkDecisions());
+  }
+
+  if (group === "proof" && action === "bundle") {
+    const commands = flags.values["quick"] === true ? [{ id: "source-status", command: "node", args: ["src/cli.mjs", "source-status", "--json", "--fail-on-source"], timeoutMs: 30000 }] : undefined;
+    const bundle = await createProofBundle({ label: flags.values.label ?? "proof", commands });
+    return print(bundle, bundle.status === "passed" ? 0 : 1);
+  }
+
+  if (group === "proof" && action === "list") {
+    return print(await listProofBundles());
+  }
+
+  if (group === "mirror" && action === "plan") {
+    return print(await addMirrorPlan({
+      id: flags.values.id,
+      host: flags.values.host,
+      url: flags.values.url,
+      remote: flags.values.remote,
+      purpose: flags.values.purpose,
+      visibility: flags.values.visibility
+    }));
+  }
+
+  if (group === "mirror" && action === "list") {
+    return print(await listMirrorPlans());
+  }
+
+  if (group === "mirror" && action === "verify") {
+    if (!subject) throw new Error("mirror id is required");
+    const result = await verifyMirrorPlan(subject);
+    return print(result, result.result.ok ? 0 : 1);
   }
 
   if (group === "failures" && action === "list") {
@@ -146,7 +188,7 @@ function parseFlags(input) {
       values.json = true;
       continue;
     }
-    if (["fail-on-source", "no-failure-write", "all", "public-safe"].includes(key)) {
+    if (["fail-on-source", "no-failure-write", "all", "public-safe", "quick"].includes(key)) {
       values[key] = true;
       continue;
     }
@@ -194,6 +236,13 @@ Usage:
   node src/cli.mjs status [--json]
   node src/cli.mjs source-status [--json] [--fail-on-source]
   node src/cli.mjs autonomy run [--json]
+  node src/cli.mjs next decide [--question <question>] [--json]
+  node src/cli.mjs next list [--json]
+  node src/cli.mjs proof bundle [--label <label>] [--quick] [--json]
+  node src/cli.mjs proof list [--json]
+  node src/cli.mjs mirror plan --url <https://gitlab.com/group/project.git> [--id <id>] [--host gitlab] [--remote gitlab]
+  node src/cli.mjs mirror list [--json]
+  node src/cli.mjs mirror verify <id> [--json]
   node src/cli.mjs eval list [--json]
   node src/cli.mjs eval run <id> [--json]
   node src/cli.mjs failures list [--json] [--all]

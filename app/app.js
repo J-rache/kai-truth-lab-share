@@ -45,6 +45,10 @@ document.getElementById("runMystroHandoff").addEventListener("click", async () =
   await api.post("/api/mystro/handoff", { projectId: "dashboard", evalId: "completion-gate" }).catch((error) => ({ error: error.message }));
   await Promise.all([loadFailures(), loadRuns()]);
 });
+document.getElementById("decideNextWork").addEventListener("click", async () => {
+  const result = await api.post("/api/next-work/decide", { question: "Dashboard next-work decision" });
+  document.getElementById("nextWorkResult").innerHTML = `<article class="item"><h3>${escapeHtml(result.title)}</h3><span class="badge">${escapeHtml(result.status)}</span><small>${escapeHtml(result.reason)}</small></article>`;
+});
 
 document.getElementById("claimForm").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -111,6 +115,25 @@ document.getElementById("failureForm").addEventListener("submit", async (event) 
   await loadFailures();
 });
 
+document.getElementById("proofForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  await api.post("/api/proof-bundles", {
+    label: form.get("label"),
+    quick: form.get("quick") === "on"
+  }).catch((error) => ({ error: error.message }));
+  event.currentTarget.reset();
+  await loadProofBundles();
+});
+
+document.getElementById("mirrorForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  await api.post("/api/mirrors", Object.fromEntries(form.entries()));
+  event.currentTarget.reset();
+  await loadMirrors();
+});
+
 function setView(view) {
   state.activeView = view;
   document.querySelectorAll(".nav").forEach((button) => button.classList.toggle("active", button.dataset.view === view));
@@ -118,7 +141,7 @@ function setView(view) {
 }
 
 async function loadAll() {
-  await Promise.all([loadStatus(), loadEvals(), loadRuns(), loadSourceStatus(), loadClaims(), loadTools(), loadSeats(), loadFailures(), loadNotes()]);
+  await Promise.all([loadStatus(), loadEvals(), loadRuns(), loadSourceStatus(), loadClaims(), loadTools(), loadSeats(), loadFailures(), loadProofBundles(), loadMirrors(), loadNotes()]);
 }
 
 async function loadStatus() {
@@ -200,6 +223,24 @@ async function loadFailures() {
     .reverse()
     .map((failure) => `<article class="item ${failure.severity === "high" ? "fail" : ""}"><h3>${escapeHtml(failure.summary)}</h3><span class="badge">${escapeHtml(failure.severity)}</span><small>${escapeHtml(failure.source)} | ${escapeHtml(failure.status)}</small></article>`)
     .join("") || `<article class="item"><small>No open failures.</small></article>`;
+}
+
+async function loadProofBundles() {
+  const bundles = await api.get("/api/proof-bundles");
+  document.getElementById("proofList").innerHTML = bundles
+    .slice()
+    .reverse()
+    .map((bundle) => `<article class="item ${bundle.status === "passed" ? "pass" : "fail"}"><h3>${escapeHtml(bundle.label)}</h3><span class="badge ${bundle.status === "passed" ? "pass" : "fail"}">${escapeHtml(bundle.status)}</span><small>${escapeHtml(bundle.head || bundle.finishedAt)}</small></article>`)
+    .join("") || `<article class="item"><small>No proof bundles yet.</small></article>`;
+}
+
+async function loadMirrors() {
+  const mirrors = await api.get("/api/mirrors");
+  document.getElementById("mirrorList").innerHTML = mirrors
+    .slice()
+    .reverse()
+    .map((mirror) => `<article class="item"><h3>${escapeHtml(mirror.id)}</h3><span class="badge">${escapeHtml(mirror.status)}</span><small>${escapeHtml(mirror.url)}</small></article>`)
+    .join("") || `<article class="item"><small>No mirror plans yet.</small></article>`;
 }
 
 function metric(label, value) {

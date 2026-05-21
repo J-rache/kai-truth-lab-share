@@ -23,6 +23,9 @@ Status legend: complete means implemented, documented, and covered by at least o
 - [x] Add a Mystro completion handoff so project completion can be blocked by Truth Lab evidence.
 - [x] Add a tool promotion flow so new tools are classified as private, public-share candidate, or rejected until verified.
 - [x] Add model self-eval packs for hallucination boundaries and tool-use discipline.
+- [x] Add proof-bundle generation so final handbacks can point to durable machine evidence.
+- [x] Add repository redundancy tracking for GitHub/GitLab backup and public-share destinations.
+- [x] Add a next-work decision ledger so self-directed choices are recorded instead of being chat-only.
 - [x] Add public first-run examples and model-client examples.
 - [x] Add docs for the architecture, model protocol, eval checks, truth states, public sharing, and standalone app.
 - [x] Add a final self-evaluation pass that asks whether anything obvious is still missing.

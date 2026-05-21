@@ -11,9 +11,14 @@
     { "type": "file_exists", "path": "src/failure-inbox.mjs" },
     { "type": "file_exists", "path": "src/mystro-bridge.mjs" },
     { "type": "file_exists", "path": "src/tool-promotion.mjs" },
+    { "type": "file_exists", "path": "src/proof-bundle.mjs" },
+    { "type": "file_exists", "path": "src/repo-redundancy.mjs" },
+    { "type": "file_exists", "path": "src/next-work.mjs" },
     { "type": "file_exists", "path": "app/index.html" },
     { "type": "file_exists", "path": "docs/everything-i-want-todo.md" },
     { "type": "file_exists", "path": "docs/autonomy.md" },
+    { "type": "file_exists", "path": "docs/proof-bundles.md" },
+    { "type": "file_exists", "path": "docs/redundancy.md" },
     { "type": "json_file_valid", "path": "package.json" },
     { "type": "json_file_valid", "path": "lab-room/lab-config.json" },
     { "type": "json_file_valid", "path": "client-packages/mcp/codex-truth-lab.local.json" },
@@ -57,13 +62,41 @@
       "expect": { "exitCode": 0, "stdoutIncludes": ["public_share_candidate"] }
     },
     {
+      "type": "command",
+      "command": "node",
+      "args": ["src/cli.mjs", "proof", "bundle", "--label", "self-check", "--quick", "--json"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0, "stdoutIncludes": ["\"status\": \"passed\""] }
+    },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["src/cli.mjs", "mirror", "plan", "--id", "self-check-gitlab", "--url", "https://gitlab.com/example/example.git", "--json"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0, "stdoutIncludes": ["\"status\": \"planned\""] }
+    },
+    {
+      "type": "command",
+      "command": "node",
+      "args": ["src/cli.mjs", "next", "decide", "--question", "self-check", "--json"],
+      "timeoutMs": 120000,
+      "expect": { "exitCode": 0, "stdoutIncludes": ["\"decision\""] }
+    },
+    {
       "type": "git_source_clean",
       "runtimePaths": [
         "lab-room/runs/",
         "lab-room/session-notes/",
         "lab-room/runtime/",
         "lab-room/claims/",
-        "lab-room/tools/"
+        "lab-room/tools/",
+        "lab-room/autonomy/",
+        "lab-room/failure-inbox/",
+        "lab-room/mystro-handoffs/",
+        "lab-room/tool-decisions/",
+        "lab-room/proof-bundles/",
+        "lab-room/redundancy/",
+        "lab-room/next-work/"
       ]
     }
   ]

@@ -16,6 +16,9 @@ export const defaultConfig = {
     "lab-room/failure-inbox/",
     "lab-room/mystro-handoffs/",
     "lab-room/tool-decisions/",
+    "lab-room/proof-bundles/",
+    "lab-room/redundancy/",
+    "lab-room/next-work/",
     "node_modules/"
   ],
   claimStates: ["hypothesis", "design_sketch", "unverified", "machine_proven", "source_backed", "production_ready"],
@@ -46,7 +49,14 @@ export function labPaths(cwd = process.cwd()) {
     openFailures: path.join(labRoom, "failure-inbox", "open-failures.json"),
     mystroHandoffsDir: path.join(labRoom, "mystro-handoffs"),
     toolDecisionsDir: path.join(labRoom, "tool-decisions"),
-    toolDecisions: path.join(labRoom, "tool-decisions", "decisions.jsonl")
+    toolDecisions: path.join(labRoom, "tool-decisions", "decisions.jsonl"),
+    proofBundlesDir: path.join(labRoom, "proof-bundles"),
+    proofBundles: path.join(labRoom, "proof-bundles", "bundles.jsonl"),
+    redundancyDir: path.join(labRoom, "redundancy"),
+    mirrors: path.join(labRoom, "redundancy", "mirrors.json"),
+    mirrorEvents: path.join(labRoom, "redundancy", "mirror-events.jsonl"),
+    nextWorkDir: path.join(labRoom, "next-work"),
+    nextWorkDecisions: path.join(labRoom, "next-work", "decisions.jsonl")
   };
 }
 

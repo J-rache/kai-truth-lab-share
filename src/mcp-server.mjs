@@ -3,6 +3,9 @@ import readline from "node:readline";
 import { addClaim, addTool, labStatus, listEvaluations, writeSessionNote } from "./lab.mjs";
 import { runEvaluation } from "./evaluators.mjs";
 import { sourceStatus } from "./source-status.mjs";
+import { createProofBundle } from "./proof-bundle.mjs";
+import { addMirrorPlan, listMirrorPlans } from "./repo-redundancy.mjs";
+import { decideNextWork } from "./next-work.mjs";
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: false });
 
@@ -72,6 +75,26 @@ function toolList() {
       name: "truth_lab.write_note",
       description: "Write a session note.",
       inputSchema: { type: "object", required: ["summary"], properties: { summary: { type: "string" }, details: { type: "string" }, evidence: { type: "array", items: { type: "string" } } } }
+    },
+    {
+      name: "truth_lab.create_proof_bundle",
+      description: "Create a durable proof bundle for a handoff.",
+      inputSchema: { type: "object", properties: { label: { type: "string" }, quick: { type: "boolean" } } }
+    },
+    {
+      name: "truth_lab.decide_next_work",
+      description: "Record a next-work decision instead of leaving autonomy as chat-only.",
+      inputSchema: { type: "object", properties: { question: { type: "string" } } }
+    },
+    {
+      name: "truth_lab.plan_mirror",
+      description: "Record a clean GitHub/GitLab mirror destination without credentials in the URL.",
+      inputSchema: { type: "object", required: ["url"], properties: { id: { type: "string" }, host: { type: "string" }, url: { type: "string" }, remote: { type: "string" }, purpose: { type: "string" }, visibility: { type: "string" } } }
+    },
+    {
+      name: "truth_lab.list_mirrors",
+      description: "List repository mirror plans.",
+      inputSchema: { type: "object", properties: {} }
     }
   ];
 }
@@ -96,6 +119,12 @@ async function dispatch(name, args) {
   if (name === "truth_lab.add_claim") return addClaim(args);
   if (name === "truth_lab.add_tool") return addTool(args);
   if (name === "truth_lab.write_note") return writeSessionNote(args);
+  if (name === "truth_lab.create_proof_bundle") {
+    const commands = args.quick ? [{ id: "source-status", command: "node", args: ["src/cli.mjs", "source-status", "--json", "--fail-on-source"], timeoutMs: 30000 }] : undefined;
+    return createProofBundle({ label: args.label ?? "mcp-proof", commands });
+  }
+  if (name === "truth_lab.decide_next_work") return decideNextWork(args);
+  if (name === "truth_lab.plan_mirror") return addMirrorPlan(args);
+  if (name === "truth_lab.list_mirrors") return listMirrorPlans();
   throw new Error(`Unknown tool: ${name}`);
 }
-

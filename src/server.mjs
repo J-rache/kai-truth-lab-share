@@ -9,6 +9,9 @@ import { listFailures, recordFailure } from "./failure-inbox.mjs";
 import { runAutonomyCycle } from "./autonomy.mjs";
 import { recordToolPromotion } from "./tool-promotion.mjs";
 import { createMystroCompletionHandoff } from "./mystro-bridge.mjs";
+import { createProofBundle, listProofBundles } from "./proof-bundle.mjs";
+import { addMirrorPlan, listMirrorPlans, verifyMirrorPlan } from "./repo-redundancy.mjs";
+import { decideNextWork, listNextWorkDecisions } from "./next-work.mjs";
 
 const port = Number(process.env.TRUTH_LAB_PORT ?? 8799);
 const cwd = process.env.TRUTH_LAB_ROOT ?? process.cwd();
@@ -63,6 +66,15 @@ async function route(request, response) {
   if (request.method === "GET" && url.pathname === "/api/failures") {
     return json(response, 200, await listFailures({ cwd, includeClosed: url.searchParams.get("all") === "1" }));
   }
+  if (request.method === "GET" && url.pathname === "/api/proof-bundles") {
+    return json(response, 200, await listProofBundles({ cwd }));
+  }
+  if (request.method === "GET" && url.pathname === "/api/mirrors") {
+    return json(response, 200, await listMirrorPlans({ cwd }));
+  }
+  if (request.method === "GET" && url.pathname === "/api/next-work") {
+    return json(response, 200, await listNextWorkDecisions({ cwd }));
+  }
   const evalRun = url.pathname.match(/^\/api\/evals\/([^/]+)\/run$/);
   if (request.method === "POST" && evalRun) {
     const run = await runEvaluation(evalRun[1], { cwd });
@@ -89,6 +101,22 @@ async function route(request, response) {
   }
   if (request.method === "POST" && url.pathname === "/api/mystro/handoff") {
     return json(response, 201, await createMystroCompletionHandoff(await body(request), { cwd }));
+  }
+  if (request.method === "POST" && url.pathname === "/api/proof-bundles") {
+    const input = await body(request);
+    const bundle = await createProofBundle({ cwd, label: input.label ?? "dashboard-proof", commands: input.quick ? [{ id: "source-status", command: "node", args: ["src/cli.mjs", "source-status", "--json", "--fail-on-source"], timeoutMs: 30000 }] : undefined });
+    return json(response, bundle.status === "passed" ? 201 : 422, bundle);
+  }
+  if (request.method === "POST" && url.pathname === "/api/mirrors") {
+    return json(response, 201, await addMirrorPlan(await body(request), { cwd }));
+  }
+  const mirrorVerify = url.pathname.match(/^\/api\/mirrors\/([^/]+)\/verify$/);
+  if (request.method === "POST" && mirrorVerify) {
+    const result = await verifyMirrorPlan(mirrorVerify[1], { cwd });
+    return json(response, result.result.ok ? 200 : 422, result);
+  }
+  if (request.method === "POST" && url.pathname === "/api/next-work/decide") {
+    return json(response, 201, await decideNextWork({ cwd, ...(await body(request)) }));
   }
   if (request.method === "POST" && url.pathname === "/api/seats/attach") {
     return json(response, 201, await attachSeat(await body(request), { cwd }));

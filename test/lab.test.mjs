@@ -9,6 +9,9 @@ import { runAutonomyCycle } from "../src/autonomy.mjs";
 import { closeFailure, listFailures, recordFailure } from "../src/failure-inbox.mjs";
 import { createMystroCompletionHandoff } from "../src/mystro-bridge.mjs";
 import { recordToolPromotion } from "../src/tool-promotion.mjs";
+import { createProofBundle, listProofBundles } from "../src/proof-bundle.mjs";
+import { addMirrorPlan, listMirrorPlans } from "../src/repo-redundancy.mjs";
+import { decideNextWork, listNextWorkDecisions } from "../src/next-work.mjs";
 
 async function tempLab() {
   const dir = await mkdtemp(path.join(tmpdir(), "truth-lab-"));
@@ -141,4 +144,35 @@ test("autonomy cycle resolves npm command on the host platform", async () => {
     checks: [{ id: "node-ok", command: process.execPath, args: ["-e", "process.exit(0)"] }]
   });
   assert.equal(cycle.status, "passed");
+});
+
+test("proof bundle writes durable json and markdown artifacts", async () => {
+  const dir = await tempLab();
+  const bundle = await createProofBundle({
+    cwd: dir,
+    label: "unit-proof",
+    commands: [{ id: "node-ok", command: process.execPath, args: ["-e", "process.exit(0)"] }]
+  });
+  assert.equal(bundle.status, "passed");
+  assert.match(bundle.files.json, /proof-bundles/);
+  assert.match(bundle.files.markdown, /proof-bundles/);
+  assert.equal((await listProofBundles({ cwd: dir })).length, 1);
+});
+
+test("mirror plans reject credentialed URLs and keep clean destinations", async () => {
+  const dir = await tempLab();
+  await assert.rejects(
+    () => addMirrorPlan({ url: "https://token@gitlab.com/group/project.git" }, { cwd: dir }),
+    /must not contain credentials/
+  );
+  const mirror = await addMirrorPlan({ id: "gitlab", url: "https://gitlab.com/group/project.git" }, { cwd: dir });
+  assert.equal(mirror.remote, "gitlab");
+  assert.equal((await listMirrorPlans({ cwd: dir })).length, 1);
+});
+
+test("next work decisions are recorded", async () => {
+  const dir = await tempLab();
+  const decision = await decideNextWork({ cwd: dir, question: "What next?" });
+  assert.equal(decision.status, "ready_to_execute");
+  assert.equal((await listNextWorkDecisions({ cwd: dir })).length, 1);
 });

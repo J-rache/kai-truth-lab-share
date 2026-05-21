@@ -17,7 +17,9 @@
     "mcp": "node src/mcp-server.mjs",
     "export:public": "node scripts/export-public.mjs",
     "status:source": "node src/cli.mjs source-status",
-    "autonomy": "node src/cli.mjs autonomy run"
+    "autonomy": "node src/cli.mjs autonomy run",
+    "proof": "node src/cli.mjs proof bundle",
+    "next": "node src/cli.mjs next decide"
   },
   "engines": {
     "node": ">=20"

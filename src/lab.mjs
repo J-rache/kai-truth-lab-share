@@ -21,6 +21,9 @@ export async function initLab({ cwd = process.cwd() } = {}) {
   await ensureDir(paths.runsDir);
   await ensureDir(paths.runtimeDir);
   await ensureDir(paths.sessionNotesDir);
+  await ensureDir(paths.proofBundlesDir);
+  await ensureDir(paths.redundancyDir);
+  await ensureDir(paths.nextWorkDir);
   if (!existsSync(paths.config)) {
     await writeJson(paths.config, defaultConfig);
   }

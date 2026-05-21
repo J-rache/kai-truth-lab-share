@@ -20,6 +20,9 @@ The lab is not a model and does not pretend to run one. It is a bench: checks, c
 - Keeps runtime evidence separate from committed source.
 - Runs an autonomy cycle that records failures instead of relying on a human to notice them.
 - Creates Mystro completion handoffs and tool-promotion decisions.
+- Creates proof bundles for final handbacks.
+- Tracks GitHub/GitLab mirror plans without putting credentials in remote URLs.
+- Records next-work decisions when autonomy needs to choose a direction.
 
 Truth states:
 
@@ -46,6 +49,9 @@ node src/cli.mjs source-status
 node src/cli.mjs eval list
 node src/cli.mjs eval run lab-self-check
 node src/cli.mjs autonomy run
+node src/cli.mjs next decide
+node src/cli.mjs proof bundle --label final-handoff
+node src/cli.mjs mirror plan --id gitlab-share --url https://gitlab.com/group/project.git
 node src/cli.mjs failures list
 node src/cli.mjs claim add --title "New idea" --body "Speculative until checked" --state hypothesis
 node src/cli.mjs tool add --id sample --name "Sample Tool" --path "." --verify "npm run verify"
@@ -93,6 +99,9 @@ lab-room/
   tools/tools.json         ignored runtime registry
   runs/runs.jsonl          ignored runtime evidence
   session-notes/           ignored local handoff notes
+  proof-bundles/           ignored proof artifacts
+  redundancy/              ignored mirror plans and verification events
+  next-work/               ignored self-directed decision ledger
 ```
 
 ## Gate Format
@@ -118,7 +127,7 @@ Eval files are JSON:
 }
 ```
 
-Supported checks are documented in [docs/eval-checks.md](docs/eval-checks.md). Autonomy details are documented in [docs/autonomy.md](docs/autonomy.md).
+Supported checks are documented in [docs/eval-checks.md](docs/eval-checks.md). Autonomy details are documented in [docs/autonomy.md](docs/autonomy.md). Proof bundles are documented in [docs/proof-bundles.md](docs/proof-bundles.md). Repository redundancy is documented in [docs/redundancy.md](docs/redundancy.md).
 
 ## Finished Scope
 

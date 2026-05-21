@@ -1,4 +1,5 @@
-import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const dryRun = process.argv.includes("--dry-run");
@@ -28,6 +29,13 @@ const excludedPatterns = [
   /lab-room[\\/]session-notes/,
   /lab-room[\\/]claims/,
   /lab-room[\\/]tools/,
+  /lab-room[\\/]autonomy/,
+  /lab-room[\\/]failure-inbox/,
+  /lab-room[\\/]mystro-handoffs/,
+  /lab-room[\\/]tool-decisions/,
+  /lab-room[\\/]proof-bundles/,
+  /lab-room[\\/]redundancy/,
+  /lab-room[\\/]next-work/,
   /\.env$/,
   /node_modules/
 ];
@@ -38,8 +46,15 @@ if (dryRun) {
   process.exit(0);
 }
 
-await rm(target, { recursive: true, force: true });
-await mkdir(target, { recursive: true });
+if (existsSync(path.join(target, ".git"))) {
+  for (const entry of await readdir(target)) {
+    if (entry === ".git") continue;
+    await rm(path.join(target, entry), { recursive: true, force: true });
+  }
+} else {
+  await rm(target, { recursive: true, force: true });
+  await mkdir(target, { recursive: true });
+}
 for (const entry of include) {
   assertPublicPath(entry);
   await cp(path.join(process.cwd(), entry), path.join(target, entry), { recursive: true });

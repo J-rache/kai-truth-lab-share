@@ -14,6 +14,9 @@ These were the extra ideas that appeared while building the v1 scope.
 - Add an autonomy cycle and scheduled task so the lab can check itself without waiting for a human.
 - Add a failure inbox so broken checks become durable work.
 - Add Mystro handoff and tool-promotion decisions because those are operational decisions, not docs.
+- Add proof bundles because final answers should have a durable artifact behind the claim.
+- Add repository redundancy tracking because GitHub and GitLab destinations should be explicit and separately verified.
+- Add next-work decisions because autonomous choice should leave an audit trail.
 
 ## Future, Not Claimed Complete
 
