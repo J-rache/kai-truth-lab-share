@@ -20,7 +20,15 @@ Verify a public destination:
 node src/cli.mjs mirror verify gitlab-share --json
 ```
 
-For private or legacy-key GitLab destinations, use the external vaulted helper:
+For GitLab API project creation and authenticated push, use the full-access vaulted helper:
+
+```powershell
+E:\codex-persona\toolbox\gitlab-full-access\scripts\Test-GitLabFullAccess.ps1
+E:\codex-persona\toolbox\gitlab-full-access\scripts\Ensure-GitLabProject.ps1 -Path project-name -Visibility private
+E:\codex-persona\toolbox\gitlab-full-access\scripts\Push-GitLabRepo.ps1 -RepoPath C:\path\to\repo -ProjectUrl https://gitlab.com/namespace/project-name.git
+```
+
+For legacy-key GitLab destinations that already exist, use the external vaulted legacy helper:
 
 ```powershell
 E:\codex-persona\toolbox\gitlab-legacy-mirror\scripts\Test-GitLabLegacyKey.ps1 -ProjectUrl https://gitlab.com/group/project.git
@@ -32,5 +40,5 @@ Truth boundaries:
 
 - mirror URLs must be clean HTTPS URLs ending in `.git`
 - credentials are refused inside remote URLs
-- API project creation is outside this lab unless a confirmed API credential is attached
+- API project creation requires the full-access helper and the DPAPI-vaulted `codex-full-access` token
 - access is proven per destination by `git ls-remote` or push evidence
