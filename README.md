@@ -6,6 +6,11 @@ Codex Truth Lab is a local-first evaluation-gated AI workbench. It gives Codex, 
 
 The lab is not a model and does not pretend to run one. It is a bench: checks, claims, tools, session notes, and ledgers that survive beyond one chat or IDE session.
 
+## Screenshot
+
+![Codex Truth Lab share dashboard](docs/screenshots/codex-truth-lab-share-dashboard.png)
+
+
 ## What It Does
 
 - Runs repeatable eval gates from `lab-room/evals`.
