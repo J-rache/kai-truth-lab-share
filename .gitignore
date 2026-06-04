@@ -18,3 +18,6 @@ lab-room/proof-bundles/
 lab-room/redundancy/
 lab-room/next-work/
 dist-public/
+
+# Local launcher receipts.
+.kai/*.log
